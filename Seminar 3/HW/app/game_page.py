@@ -1,4 +1,5 @@
 from random import choice
+from time import sleep
 
 import flet as ft
 
@@ -101,6 +102,7 @@ class GamePage(ft.UserControl):
             self.bot_action()
 
     def bot_action(self):
+        sleep(0.2)
         while True:
             e = choice(self.game_board)
             if e.content.value == 'X' or e.content.value == 'O':

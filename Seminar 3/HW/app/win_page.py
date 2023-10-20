@@ -15,5 +15,6 @@ class WinPage(ft.UserControl):
             [
                 self.win_text,
                 self.start_game
-            ]
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         )

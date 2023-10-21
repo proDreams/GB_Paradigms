@@ -81,6 +81,7 @@ class GamePage(ft.UserControl):
             buttons.append(temp)
         if self.current_turn == 'bot':
             choice(buttons).content.value = 'O'
+            choice(buttons).on_click = False
         return buttons
 
     def print_button(self, e):

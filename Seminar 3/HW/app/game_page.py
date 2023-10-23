@@ -7,6 +7,7 @@ import flet as ft
 class GamePage(ft.UserControl):
     def __init__(self):
         super().__init__()
+        self.available_turns = 8
         self.player_text = ft.Text(
             'Сейчас ходит:',
             size=18,
@@ -82,17 +83,13 @@ class GamePage(ft.UserControl):
         if self.current_turn == 'bot':
             choice(buttons).content.value = 'O'
             choice(buttons).on_click = False
+            self.available_turns -= 1
         return buttons
-
-    def print_button(self, e):
-        e.control.content.value = 'O'
-        self.current_turn = 'user'
-        self.bot_turn.visible = False
-        self.user_turn.visible = True
 
     def user_action(self, e):
         e.control.content.value = 'X'
         e.control.on_click = None
+        self.available_turns -= 1
         if self.check_win():
             self.page.go(route="/win_page", winner=self.current_turn)
         else:
@@ -103,21 +100,25 @@ class GamePage(ft.UserControl):
             self.bot_action()
 
     def bot_action(self):
-        sleep(0.2)
-        while True:
-            e = choice(self.game_board)
-            if e.content.value == 'X' or e.content.value == 'O':
-                continue
-            break
-        e.content.value = 'O'
-        e.on_click = None
-        if self.check_win():
-            self.page.go("/win_page", winner=self.current_turn)
+        sleep(0.3)
+        if not self.available_turns:
+            self.page.go("/win_page", winner='nobody')
         else:
-            self.current_turn = 'user'
-            self.bot_turn.visible = False
-            self.user_turn.visible = True
-            self.update()
+            self.available_turns -= 1
+            while True:
+                e = choice(self.game_board)
+                if e.content.value == 'X' or e.content.value == 'O':
+                    continue
+                break
+            e.content.value = 'O'
+            e.on_click = None
+            if self.check_win():
+                self.page.go("/win_page", winner=self.current_turn)
+            else:
+                self.current_turn = 'user'
+                self.bot_turn.visible = False
+                self.user_turn.visible = True
+                self.update()
 
     def check_win(self):
         win_combinations = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6),

@@ -4,7 +4,13 @@ import flet as ft
 class WinPage(ft.UserControl):
     def __init__(self, winner):
         super().__init__()
-        self.win_text = ft.Text('Пользователь победил!' if winner == 'user' else 'Компьютер победил!',
+        if winner == 'user':
+            self.winner = 'Пользователь победил!'
+        elif winner == 'bot':
+            self.winner = 'Компьютер победил!'
+        else:
+            self.winner = 'Ничья!'
+        self.win_text = ft.Text(self.winner,
                                 size=18,
                                 weight="bold"
                                 )
